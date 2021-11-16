@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Sidorov</title>
+</head>
+<body>
+<h3>Admin web page</h3>
+<form method="post" action="/logout">
+    <input type="submit" value="LogOut">
+</form>
+<table border="1">
+    <tr>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Surname</td>
+        <td>Birthdate</td>
+        <td>Password(BCrypt)</td>
+        <td>ROLE_USER</td>
+        <td>ROLE_ADMIN</td>
+    </tr>
+    <tr data-th-each="user : ${userList}">
+        <form action="#" th:action="@{/admin/updateUser/{id}(id=${user.getId()})}" th:method="PUT">
+            <td data-th-text="${user.getId()}">...</td>
+            <td><input type="text" name="username" th:value="${user.getUsername()}"/></td>
+            <td><input type="text" name="surname" th:value="${user.getSurname}"/></td>
+            <td><input type="tel" name="phoneNumber" th:value="${user.getPhoneNumber()}"/></td>
+            <td><input type="text" name="password" th:value="${user.getPassword()}"/></td>
+            <td><input type="checkbox" name="isROLE_USER"
+                       th:checked="${user.getAuthorities().contains(user_role)}"></td>
+            <td><input type="checkbox" name="isROLE_ADMIN"
+                       th:checked="${user.getAuthorities().contains(admin_role)}"></td>
+            <td>
+                <input type="hidden" name="_method" value="PUT" id="updateButton">
+                <button type="submit">update</button>
+            </td>
+        </form>
+        <td>
+            <form action="#" th:action="@{/admin/deleteUser/{id}(id=${user.getId()})}" th:method="DELETE">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button type="submit">delete</button>
+            </form>
+        </td>
+    </tr>
+            <tr>
+                <form th:object="${newUser}" th:method="POST" action="#" th:action="@{/admin/addUser}">
+                <td></td>
+                    <td><input type="text" name="username" id="name"/></td>
+                    <td><input type="text" name="surname" id="surname"/></td>
+                    <td><input type="tel" name="phoneNumber" id="phoneNumber"/></td>
+                    <td><input type="text" name="password"/></td>
+                    <td><button type="submit" name="action" value="addUser">add user</button></td>
+                    <td><button type="submit" name="action" value="addAdmin">add admin</button></td>
+                </form>
+            </tr>
+</table>
+</body>
+</html>
